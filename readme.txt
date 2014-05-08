@@ -18,5 +18,3 @@ Se aceptan sugerencias y aportaciones
 Saludos 
 
 
-.
-
