@@ -1,4 +1,13 @@
-<?
+<? 
+/*
+* Revisamos si se esta ejecutando php desde ambiente local, si es asi permitimos acceso a las definiciones de las funciones para debuggeo
+* 
+*/
+$current_ip=gethostbyname(trim(`hostname`));
+$regex='/\.[0-9]*?$/';
+$sub_red=preg_replace($regex,'',$current_ip);
+if	(	$sub_red =='10.0.1')
+{
 /********************************************************************************
  * paquete de funciones para debuguear
  * Creado por: Beny
@@ -56,6 +65,15 @@ function var_printer($var)
 			$print_buffer.='Object(empty)';
 		else
 		{
+			if(get_class($var)==='SimpleXMLElement')
+			{
+				$out_var=array();
+				foreach ( (array) $var as $index_var => $node_var )
+					$out_var[$index_var] = ( is_object ( $node_var ) ) ? xml2array ( $node_var ) : $node_var;
+				$var=$out_var;
+				$out_var=array();
+			}
+			
 			$fil_cont=1;
 			$table_id='object_'.$GLOBALS["noEscalar_count"];
 			$print_buffer.='Object <span   onclick="showNoEscalar(this,\''.$table_id.'\')"  class="button_no_escalar show_no_escalar">+</span> <table class="no_escalar_hidden" id="'.$table_id.'" style="border-style:dashed;border-width:1px; padding-left:0px; background-color:#F9C5A0;">';
@@ -398,5 +416,178 @@ function debugg_trace()
 	$objet_trace = debug_backtrace();
 	print_r($objet_trace);
 	die();
+}
+
+
+ /********************************************************************************
+ * recibe 1 parametro opcional
+ *	-$forceOrigin:			para indicar si se permite recargar las variables post/get desde cualquier funcion, 
+ *  						o unicamente desde la funcion orignal que los cargo
+ * regresa
+ *  -nada
+ * guarda los valores get/post en session para ser accedidos despues por get_history_incoming
+ * Creado por: Beny
+ *******************************************************************************/
+ 
+function listen_incoming($forceOrigin=FALSE)
+{
+	$socket='default';
+	if($forceOrigin)
+	{
+		$objet_trace = debug_backtrace();
+		$linea=$objet_trace[0]['line'];
+		$archivo=$objet_trace[0]['file'];
+		$function_launcher = $objet_trace[1]['function'];
+		$socket=$archivo.$function_launcher;
+	}
+	
+	if(!isset($_SESSION))	
+		session_start();
+	if(!isset($_SESSION['listen_count']))
+		$_SESSION['listen_count']=0;
+	
+	$_SESSION['socket'][$_SESSION['listen_count']]=$socket;
+	$_SESSION['listen_get'][$_SESSION['listen_count']]=$_GET;
+	$_SESSION['listen_post'][$_SESSION['listen_count']]=$_POST;
+	$_SESSION['listen_count']++;
+}
+
+
+ /********************************************************************************
+ * recibe 3 parametros opcionales
+ *	-$listenNumber			indica la secuencia de guardado que se quiere recargar, el default es 0
+ *	-$method				para indicar a que variable se quiere recargar get/post default es ambas
+ *	-$forceOrigin:			para indicar si se permite recargar las variables post/get desde cualquier funcion, 
+ *  						o unicamente desde la funcion orignal que los cargo
+ * regresa
+ *  -nada
+ * recarga los valores get/post de session guardados por listen_incoming
+ * Creado por: Beny
+ *******************************************************************************/
+
+function get_history_incoming($listenNumber=0,$method='both',$forceOrigin=FALSE)
+{
+	$socket='default';
+	if($forceOrigin)
+	{
+		$objet_trace = debug_backtrace();
+		$linea=$objet_trace[0]['line'];
+		$archivo=$objet_trace[0]['file'];
+		$function_launcher = $objet_trace[1]['function'];
+		$socket=$archivo.$function_launcher;
+	}
+	
+	
+	if(!isset($_SESSION[$listenNumber]))
+		return FALSE;
+	if( $_SESSION['socket'][$_SESSION[$listenNumber]]===$socket )
+	{
+		if(strcasecmp( $method,'get')==0 )
+		{
+			$_GET=$_SESSION['listen_get'][$listenNumber];
+		}
+		if(strcasecmp( $method,'post')==0 )
+		{
+			$_POST=$_SESSION['listen_post'][$listenNumber];
+		}
+		if(strcasecmp( $method,'both')==0 )
+		{
+			$_GET=$_SESSION['listen_get'][$listenNumber];
+			$_POST=$_SESSION['listen_post'][$listenNumber];
+		}
+	}
+}
+
+ /********************************************************************************
+ * sin parametros
+ * regresa
+ *  -nada
+ * guarda los valores get/post en sesion para ser recargados despues por reload_last_incoming
+ * Creado por: Beny
+ *******************************************************************************/
+function save_last_incoming()
+{	
+	if(!isset($_SESSION))	
+		session_start();
+	clear_incoming();
+	
+	$_SESSION['listen_count']=0;
+	$_SESSION['listen_get'][$_SESSION['listen_count']]=$_GET;
+	$_SESSION['listen_post'][$_SESSION['listen_count']]=$_POST;
+	$_SESSION['listen_count']++;
+}
+
+/********************************************************************************
+ * alias para save_last_incoming
+ * Creado por: Beny
+ *******************************************************************************/
+ 
+function debcarga()
+{
+	save_last_incoming();
+}
+
+ /********************************************************************************
+ * sin parametros
+ * regresa
+ *  -nada
+ * recarga los valores get/post guardados por save_last_incoming
+ * Creado por: Beny
+ *******************************************************************************/
+function reload_last_incoming()
+{
+	$_GET=$_SESSION['listen_get'][($_SESSION['listen_count']-1)];
+	$_POST=$_SESSION['listen_post'][($_SESSION['listen_count']-1)];
+}
+
+/********************************************************************************
+ * alias para reload_last_incoming
+ * Creado por: Beny
+ *******************************************************************************/
+ 
+function debrecarga()
+{
+	reload_last_incoming();
+}
+
+/********************************************************************************
+ * alias para reload_last_incoming
+ * Creado por: Beny
+ *******************************************************************************/
+ 
+function form_cache($save=FALSE)
+{	
+	if(!isset($_SESSION['listen_count']))
+	{
+		save_last_incoming();
+		return TRUE;
+	}
+	if($save)
+	{
+		save_last_incoming();
+		return TRUE;
+	}
+	else
+		reload_last_incoming();
+	return false;
+}
+
+ /********************************************************************************
+ * sin parametros
+ * regresa
+ *  -nada
+ * borra los datos de session de incoming
+ * Creado por: Beny
+ *******************************************************************************/
+ 
+function clear_incoming()
+{
+	if(isset($_SESSION['listen_count']))
+		unset($_SESSION['listen_count']);
+	if(isset($_SESSION['listen_get']))
+		unset($_SESSION['listen_get']);
+	if(isset($_SESSION['listen_post']))
+		unset($_SESSION['listen_post']);	
+}
 }
 ?>
