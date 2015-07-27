@@ -41,7 +41,7 @@ if	(	$sub_red =='10.0.1')
 			{
 				$fil_cont=1;
 				$table_id='array_'.$GLOBALS["noEscalar_count"];
-				$print_buffer.='Array <span   onclick="jsDebuggShowNoEscalar(this,\''.$table_id.'\')"  class="debugg-css-button-no-escalar debugg-css-show-no-escalar debugg-css-button-background"></span> <table onMouseEnter="jsDebuggAddShadow(this)"  onMouseLeave="jsDebuggRemoveShadow(this)" class="debugg-css-no-escalar-hidden" id="'.$table_id.'" style="background-color:#F9C5A0;">';
+				$print_buffer.='<div class="debugg-data-type"> Array <span   onclick="jsDebuggShowNoEscalar(this,\''.$table_id.'\')"  class="debugg-css-button-no-escalar debugg-css-show-no-escalar debugg-css-button-background"></span> </div><table onMouseEnter="jsDebuggAddShadow(this)"  onMouseLeave="jsDebuggRemoveShadow(this)" class="debugg-css-no-escalar-hidden" id="'.$table_id.'" style="background-color:#F9C5A0;">';
 				foreach($var AS $campo=>$valor)
 				{
 					if($fil_cont++%2==0)
@@ -76,7 +76,7 @@ if	(	$sub_red =='10.0.1')
 				
 				$fil_cont=1;
 				$table_id='object_'.$GLOBALS["noEscalar_count"];
-				$print_buffer.='Object <span   onclick="jsDebuggShowNoEscalar(this,\''.$table_id.'\')"  class="debugg-css-button-no-escalar debugg-css-show-no-escalar debugg-css-button-background"></span> <table class="debugg-css-no-escalar-hidden" id="'.$table_id.'" style="background-color:#F9C5A0; ">';
+				$print_buffer.='<div class="debugg-data-type"> Object <span   onclick="jsDebuggShowNoEscalar(this,\''.$table_id.'\')"  class="debugg-css-button-no-escalar debugg-css-show-no-escalar debugg-css-button-background"></span> </div><table class="debugg-css-no-escalar-hidden" id="'.$table_id.'" style="background-color:#F9C5A0; ">';
 				foreach($var AS $campo=>$valor)
 				{
 					if($fil_cont++%2==0)
@@ -223,6 +223,8 @@ if	(	$sub_red =='10.0.1')
 				{
 					border-radius: 3px;
 					border: 1px solid #000000;
+					display:inline-block;
+					vertical-align: middle;
 				}
 				/*
 				.debugg-css-no-escalar-visible:hover
@@ -245,6 +247,11 @@ if	(	$sub_red =='10.0.1')
 				.debugg-css-iterator
 				{
 					padding-left:15px;
+				}
+				.debugg-data-type
+				{
+					display:inline-block;
+					vertical-align: middle;
 				}
 			</style>
 			<script>
