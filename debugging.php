@@ -41,7 +41,7 @@ if	(	$sub_red =='10.0.1')
 			{
 				$fil_cont=1;
 				$table_id='array_'.$GLOBALS["noEscalar_count"];
-				$print_buffer.='<div class="debugg-data-type"> Array <span   onclick="jsDebuggShowNoEscalar(this,\''.$table_id.'\')"  class="debugg-css-button-no-escalar debugg-css-show-no-escalar debugg-css-button-background"></span> </div><table onMouseEnter="jsDebuggAddShadow(this)"  onMouseLeave="jsDebuggRemoveShadow(this)" class="debugg-css-no-escalar-hidden" id="'.$table_id.'" style="background-color:#F9C5A0;">';
+				$print_buffer.='<div class="debugg-data-type"> Array <span   onclick="jsDebuggShowNoEscalar(this,\''.$table_id.'\')"  class="debugg-css-button-no-escalar debugg-css-show-no-escalar debugg-css-no-escalar debugg-css-button-background"></span> </div><table onMouseEnter="jsDebuggAddShadow(this)"  onMouseLeave="jsDebuggRemoveShadow(this)" class="debugg-css-no-escalar-hidden" id="'.$table_id.'" style="background-color:#F9C5A0;">';
 				foreach($var AS $campo=>$valor)
 				{
 					if($fil_cont++%2==0)
@@ -76,7 +76,7 @@ if	(	$sub_red =='10.0.1')
 				
 				$fil_cont=1;
 				$table_id='object_'.$GLOBALS["noEscalar_count"];
-				$print_buffer.='<div class="debugg-data-type"> Object <span   onclick="jsDebuggShowNoEscalar(this,\''.$table_id.'\')"  class="debugg-css-button-no-escalar debugg-css-show-no-escalar debugg-css-button-background"></span> </div><table class="debugg-css-no-escalar-hidden" id="'.$table_id.'" style="background-color:#F9C5A0; ">';
+				$print_buffer.='<div class="debugg-data-type"> Object <span   onclick="jsDebuggShowNoEscalar(this,\''.$table_id.'\')"  class="debugg-css-button-no-escalar debugg-css-show-no-escalar debugg-css-no-escalar debugg-css-button-background"></span> </div><table class="debugg-css-no-escalar-hidden" id="'.$table_id.'" style="background-color:#F9C5A0; ">';
 				foreach($var AS $campo=>$valor)
 				{
 					if($fil_cont++%2==0)
@@ -148,6 +148,7 @@ if	(	$sub_red =='10.0.1')
 					height:25px;
 					border-radius: 3px;
 					display: inline-block;
+					border: 1px solid #d1aa65;
 				}
 				
 				.debugg-css-button-debugg:hover
@@ -188,15 +189,23 @@ if	(	$sub_red =='10.0.1')
 				.debugg-css-show-no-escalar
 				{
 					background-color:#F9D9A0;
-					padding-left:20px;
 					background-image: url("/debugg/plus.png");	
 				}
 				
 				.debugg-css-hide-no-escalar
-				{
-					padding-left:20px;
+				{	
+					
 					background-color:#FFDEC7;
 					background-image: url("/debugg/less.png");
+				}
+
+				.debugg-css-no-escalar
+				{
+					border: 1px solid #A37B32;
+    				border-radius: 4px;
+    				margin: 5px;
+					padding-left:18px;
+					padding-top: 2px;
 				}
 				
 				.debugg-css-debugg-content
@@ -219,19 +228,15 @@ if	(	$sub_red =='10.0.1')
 				{
 					display:none;
 				}
+
 				.debugg-css-no-escalar-visible
 				{
 					border-radius: 3px;
-					border: 1px solid #000000;
+					border: 1px solid #28416c;
 					display:inline-block;
 					vertical-align: middle;
 				}
-				/*
-				.debugg-css-no-escalar-visible:hover
-				{
-					box-shadow: 5px 5px 5px #AAAAAA; 
-				}
-*/
+
 				.debugg-css-step-container
 				{
 					display:inline-block;
