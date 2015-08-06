@@ -6,7 +6,7 @@
 $current_ip=gethostbyname(trim(`hostname`));
 $regex='/\.[0-9]*?$/';
 $sub_red=preg_replace($regex,'',$current_ip);
-if	(	$sub_red =='10.0.1')
+if	(	1 || $sub_red =='10.57.0')
 {
 	/********************************************************************************
 	 * paquete de funciones para debuguear
