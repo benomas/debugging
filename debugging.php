@@ -1,13 +1,4 @@
 <? 
-/*
-* Revisamos si se esta ejecutando php desde ambiente local, si es asi permitimos acceso a las definiciones de las funciones para debuggeo
-* 
-*/
-$current_ip=gethostbyname(trim(`hostname`));
-$regex='/\.[0-9]*?$/';
-$sub_red=preg_replace($regex,'',$current_ip);
-if	(	1 || $sub_red =='10.57.0')
-{
 	/********************************************************************************
 	 * paquete de funciones para debuguear
 	 * Creado por: Beny
@@ -244,9 +235,9 @@ if	(	1 || $sub_red =='10.57.0')
 					border-radius:8px;
 				}
 
-				.debugg-css-alg-middle
+				.debugg-css-alg-top
 				{
-					vertical-align: middle;
+					vertical-align: top;
 				}
 
 				.debugg-css-iterator
@@ -256,7 +247,7 @@ if	(	1 || $sub_red =='10.57.0')
 				.debugg-data-type
 				{
 					display:inline-block;
-					vertical-align: middle;
+					vertical-align: top;
 				}
 			</style>
 			<script>
@@ -349,9 +340,9 @@ if	(	1 || $sub_red =='10.57.0')
 		}
 		?>
 			<div class="debugg-css-step-container">
-				<div onclick="jsDebuggShowDebugg(this,'<?=$id_debugg ?>')" class="debugg-css-button-debugg debugg-css-show debugg-css-alg-middle debugg-css-button-background" title="Paso:<? echo $GLOBALS["debugg_step"];?>">
+				<div onclick="jsDebuggShowDebugg(this,'<?=$id_debugg ?>')" class="debugg-css-button-debugg debugg-css-show debugg-css-alg-top debugg-css-button-background" title="Paso:<? echo $GLOBALS["debugg_step"];?>">
 				</div>
-				<div id="<?=$id_debugg?>" class="debugg-css-hide-debugg-content debugg-css-alg-middle"> Debugging <br>
+				<div id="<?=$id_debugg?>" class="debugg-css-hide-debugg-content debugg-css-alg-top"> Debugging <br>
 		<?
 		
 		if(!empty($function_launcher))
@@ -784,5 +775,4 @@ if	(	1 || $sub_red =='10.57.0')
 	     
 	    return($xml_array); 
 	}
-}
 ?>
